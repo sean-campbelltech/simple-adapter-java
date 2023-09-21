@@ -1,14 +1,22 @@
 package com.campbelltech;
 
-// Adapter
-public class XmlToJsonAdapter implements JsonParser {
-    @Override
-    public Object parse(String data) {
-        return null;
+// Adapter -> Converts the XmlParser interface to the JsonParser interface
+public class XmlToJsonAdapter<T> implements JsonParser<T> {
+    private final Class<T> type;
+
+    public XmlToJsonAdapter(Class<T> type) {
+        this.type = type;
     }
 
     @Override
-    public String convertToJson(Object obj) {
-        return null;
+    public T parse(String data) {
+        XmlParser<T> xmlParser = new XmlParserImpl<>(type);
+        return xmlParser.parse(data);
+    }
+
+    @Override
+    public String convertToJson(T obj) {
+        JsonParser<T> jsonParser = new JsonParserImpl<>(type);
+        return jsonParser.convertToJson(obj);
     }
 }
